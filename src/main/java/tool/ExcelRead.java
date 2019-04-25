@@ -13,7 +13,7 @@ public class ExcelRead {
 	
 	@Test
 	public void main() {
-		String filePath = "g:/Desktop/南网企业运管指标清单V1.5-20190417.xlsx";
+		String filePath = "g:\\Desktop\\南网企业运管指标清单V1.5-20190417.xlsx";
 		ExcelRead er = new ExcelRead();
 		er.getValues(filePath);
 	}
