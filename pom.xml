@@ -7,14 +7,25 @@
   <dependencies>
   
   
-  	<dependency>
+  
 
-	    <groupId>com.innoventsolutions.birt.runtime</groupId>
-	    <artifactId>org.apache.poi_3.9.0.v201405241750</artifactId>
-	    <version>4.8.0</version>
-
-	   
-	</dependency>
+	   <!-- https://mvnrepository.com/artifact/net.sourceforge.jexcelapi/jxl -->
+        <dependency>
+            <groupId>net.sourceforge.jexcelapi</groupId>
+            <artifactId>jxl</artifactId>
+            <version>2.6.12</version>
+        </dependency>
+        
+        <dependency>
+        <groupId>org.apache.poi</groupId>
+           <artifactId>poi</artifactId>
+           <version>3.10-FINAL</version>
+        </dependency>
+      <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+            <version>3.10-FINAL</version>
+		</dependency>
   	
   
   </dependencies>

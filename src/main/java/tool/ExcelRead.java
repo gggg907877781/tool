@@ -1,55 +1,127 @@
 package tool;
 
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
-import org.apache.poi.hssf.usermodel.HSSFCell;
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
+import jxl.Sheet;
+import jxl.Workbook;
 import org.junit.Test;
 
 public class ExcelRead {
 	
 	
 	@Test
-	public void main() {
-		String filePath = "g:\\Desktop\\南网企业运管指标清单V1.5-20190417.xlsx";
-		ExcelRead er = new ExcelRead();
-		er.getValues(filePath);
-	}
+	 public void main() {
+		List s = parseExcel(new File("G:\\Desktop\\南网企业运管指标清单V1.5-20190417.xlsx"));
+		System.out.println(s);
+    }
 
-	public String getValues(String filePath) {
-		int a = 0;
-		String values = null;
-		try {
-			// 创建对Excel工作簿文件的引用
-			HSSFWorkbook workbook = new HSSFWorkbook(new FileInputStream("filePath"));
-			// 创建对工作表的引用。
-			// 本例是按名引用（让我们假定那张表有着缺省名"Sheet1"）
-			HSSFSheet sheet = workbook.getSheet("Sheet1");
-			// 也可用getSheetAt(	int index)按索引引用，
-			// 在Excel文档中，第一张工作表的缺省索引是0，
-			// 其语句为：HSSFSheet sheet = workbook.getSheetAt(0);
-			// 读取左上端单元
-			a = sheet.getLastRowNum();
-			System.out.println(a);
-			for (int j = 1; j <= a; j++) {
-				HSSFRow row = sheet.getRow(j);
-				System.out.println("-----------------------第" + j + "行数据----------------");
-				for (int i = 0; i < row.getLastCellNum(); i++) {
-					HSSFCell cell = row.getCell(i);
-					// 输出单元内容，cell.getStringCellValue()就是取所在单元的值
-					values = cell.getStringCellValue();
-					System.out.println("单元格内容是： " + values);
-				}
-			}
-		} catch (Exception e) {
-			System.out.println("已运行xlRead() : " + e);
-		} finally {
-		}
-		return values;
+	
+	@Test
+	public void testFile () {
+		
+		File file = new File ("G:\\Desktop\\南网企业运管指标清单V1.5-20190417.xlsx");
+		
+		System.out.println(file.isFile());
 	}
-	
-	
+	public List<List<String>> parseXls(File file) {
+        try {
+            Workbook workbook = Workbook.getWorkbook(file);
+            Sheet sheet = workbook.getSheet(1);
+            List<List<String>> list = new ArrayList<List<String>>();
+            for (int i = 0; i < sheet.getRows(); i++) {
+                List<String> rowList = new ArrayList<String>();
+                for (int j = 31; j < sheet.getColumns(); j++) {
+                    rowList.add(sheet.getCell(j, i).getContents());
+                }
+                list.add(rowList);
+            }
+            // test
+            for (List<String> rowList : list) {
+                for (String s : rowList)
+                    System.out.print(s + ",");
+                System.out.println();
+            }
+
+            return list;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public List<List<String>> parseExcel(File file) {
+        try {
+        	
+            InputStream fis = new FileInputStream(file);
+            
+            String fileName = file.getName();
+            
+            org.apache.poi.ss.usermodel.Workbook workbook = null;
+            
+            if (fileName.toLowerCase().endsWith("xlsx")) {
+                workbook = new XSSFWorkbook(fis);
+            } else if (fileName.toLowerCase().endsWith("xls")) {
+                workbook = new HSSFWorkbook(fis);
+            }
+            
+            
+            org.apache.poi.ss.usermodel.Sheet sheet = workbook.getSheetAt(1);
+            
+            List<List<String>> list = new ArrayList<List<String>>();
+            
+           // Iterator<Row> rowIterator = sheet.iterator();
+            
+            for (int i = 0; i < sheet.getRow; i++) {
+                List<String> rowList = new ArrayList<String>();
+                for (int j = 31; j < sheet.getColumns(); j++) {
+                    rowList.add(sheet.getCell(j, i).getContents());
+                }
+                list.add(rowList);
+            }
+            
+          /*  
+            while (rowIterator.hasNext()) {
+                Row row = rowIterator.next();
+                List<String> rowList = new ArrayList<String>();
+                Iterator<Cell> cellIterator = row.cellIterator();
+                while (cellIterator.hasNext()) {
+                    Cell cell = cellIterator.next();
+                    switch(cell.getCellType()) {
+                    case Cell.CELL_TYPE_NUMERIC:
+                        rowList.add("" + cell.getNumericCellValue());
+                        break;
+                    case Cell.CELL_TYPE_STRING:
+                    default: 
+                        rowList.add(cell.getStringCellValue());
+                        break;
+                    }
+                }
+                list.add(rowList);
+            }
+            // test
+            for (List<String> rowList : list) {
+                for (String s : rowList)
+                    System.out.print(s + ",");
+                System.out.println();
+            }*/
+            return list;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
+    }
+
+   
 
 }
